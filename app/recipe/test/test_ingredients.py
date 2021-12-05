@@ -29,7 +29,8 @@ class PrivateIngredientsApiTest(TestCase):
 
     def setUp(self):
         self.client = APIClient()
-        self.user = get_user_model().objects.create_user('test@gmail.com', "123123")
+        self.user = get_user_model().objects.create_user('test@gmail.com',
+                                                         "123123")
         self.client.force_authenticate(self.user)
 
     def test_retrieve_ingredient_list(self):
@@ -64,7 +65,8 @@ class PrivateIngredientsApiTest(TestCase):
         payload = {'name': 'Vinegar', }
         res = self.client.post(INGREDIENTS_URL, payload)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        exists = Ingredient.objects.filter(name=payload['name'], user=self.user).exists()
+        exists = Ingredient.objects.filter(name=payload['name'],
+                                           user=self.user).exists()
         self.assertTrue(exists)
 
     def test_create_ingredient_invalid(self):
