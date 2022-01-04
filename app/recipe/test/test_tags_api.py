@@ -19,8 +19,10 @@ class PublicTagsApiTests(TestCase):
         self.client = APIClient()
 
     def test_login_required(self):
-        """Test that logion is required for retrieving tags"""
+        """Test that login is required for retrieving tags"""
+        # Act
         res = self.client.get(TAGS_URL)
+        # Assert
         self.assertEqual(res.status_code, status.HTTP_401_UNAUTHORIZED)
 
 
@@ -39,6 +41,7 @@ class PrivateTagsApiTests(TestCase):
         """Test retrieving tags"""
         Tag.objects.create(user=self.user, name='Vegan'),
         Tag.objects.create(user=self.user, name='Dessert'),
+
         res = self.client.get(TAGS_URL)
 
         tags = Tag.objects.all().order_by('-name')
@@ -54,7 +57,7 @@ class PrivateTagsApiTests(TestCase):
             'password'
         )
         Tag.objects.create(user=user2, name='Fruity')
-        tag = Tag.objects.create(user=self.user, name='Confort food')
+        tag = Tag.objects.create(user=self.user, name='Comfort food')
 
         res = self.client.get(TAGS_URL)
 
@@ -65,6 +68,7 @@ class PrivateTagsApiTests(TestCase):
     def test_create_tag_successful(self):
         """Test creating a new tag"""
         payload = {'name': 'Test tag'}
+
         self.client.post(TAGS_URL, payload)
 
         exists = Tag.objects.filter(user=self.user, name=payload['name']) \

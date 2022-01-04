@@ -126,7 +126,7 @@ class PrivateUserApiTests(TestCase):
         payload = {'name': 'new name', 'password': 'password123'}
         # Act
         res = self.client.patch(ME_URL, payload)
-        # Equivalent for Users.objects.get(res[id])
+        # Equivalent for Users.objects.get(id=res[id])
         self.user.refresh_from_db()
         # Assert
         self.assertEqual(self.user.name, payload['name'])
